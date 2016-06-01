@@ -20,6 +20,8 @@ suite('homepage examples', function() {
       { cron: '0 2,16 1,8,15,22 * 1,2', readable: '02:00 and 16:00 on the 1, 8, 15 and 22nd of every month and every Mon and Tue' },
       { cron: '15 3,8,10,12,14,16,18 16 * *', readable: 'Every 15th minute past the 3, 8, 10, 12, 14, 16 and 18th hour on the 16th of every month' },
       { cron: '2 8,10,12,14,16,18 * 8 0,3', readable: 'Every 2nd minute past the 8, 10, 12, 14, 16 and 18th hour on Sun and Wed in Aug' },
+      { cron: '* * * * WED', readable: 'Every minute on Wed' },
+      { cron: '0 16 * 2 WED#2', readable: '16:00 on the 2nd Wed in Feb' },
     ].forEach(function(item) {
       test(item.cron, function() {
         var readable_output = prettyCron.toString(item.cron);

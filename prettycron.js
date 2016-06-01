@@ -146,6 +146,10 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
       } else {
         output_text += ' on ';
       }
+      // set dow count
+      if (schedule['dc']) {
+        output_text += 'the ' + moment()._locale.ordinal(schedule['dc'][0]) + ' ';
+      }
       output_text += dateList(schedule['d'], 'dow');
     }
 
