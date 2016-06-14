@@ -157,7 +157,7 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
       // runs only in specific months; put this output last
       output_text += ' in ' + dateList(schedule['M'], 'mon');
     }
-
+    console.log(output_text);
     return output_text;
   };
 
