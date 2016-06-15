@@ -134,10 +134,12 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
 
     if (schedule['D']) { // runs only on specific day(s) of month
       
-      if(schedule['D'].length > 1)
+      if(schedule['D'].length > 1){
         output_text += ' every ' + schedule['D'].length + ' days';
-      else
+      }
+      else{
         output_text += ' on every day';
+      }
 
       if (!schedule['M']) {
         output_text += ' of every month';
@@ -160,10 +162,12 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
 
     if (schedule['M']) {
       // runs only in specific months; put this output last
-      if(schedule['M'].length > 1)
+      if(schedule['M'].length > 1){
         output_text += ' every ' + schedule['M'].length + ' months';
-      else
+      }
+      else{
         output_text += ' of every month';
+      }
     }
     return output_text;
   };
