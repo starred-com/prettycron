@@ -173,7 +173,7 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
           output_text += ' in ' + dateList(schedule['M'], 'mon');
       }
     }
-    console.log(output_text);
+    
     return output_text;
   };
 
