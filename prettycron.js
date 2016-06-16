@@ -91,7 +91,7 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
    */
   var scheduleToSentence = function(schedule) {
     var output_text = 'Every ';
-    
+
     if (schedule['h'] && schedule['m'] && schedule['h'].length <= 2 && schedule['m'].length <= 2) {
       // If there are only one or two specified values for
       // hour or minute, print them in HH:MM format
@@ -133,14 +133,15 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
     }
 
     if (schedule['D']) { // runs only on specific day(s) of month
-      
-      if(schedule['D'].length > 1){
-        output_text += ' every ' + schedule['D'].length + ' days';
+      if(schedule['D'].length < 31 && schedule['D'].length > 7){
+        output_text += ' every ' + Math.round( 31 / schedule['D'].length) + ' days';
       }
-      else{
+      else if(schedule['D'].length == 31){
         output_text += ' on every day';
       }
-
+      else {
+        output_text += ' on the ' + numberList(schedule['D']);
+      }
       if (!schedule['M']) {
         output_text += ' of every month';
       }
@@ -162,13 +163,17 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
 
     if (schedule['M']) {
       // runs only in specific months; put this output last
-      if(schedule['M'].length > 1){
-        output_text += ' every ' + schedule['M'].length + ' months';
+      if(schedule['M'].length < 12 && schedule['M'].length >= 4){
+          output_text += ' every ' + Math.round(12 / schedule['M'].length) + ' months';
       }
-      else{
+      else if(schedule['M'].length == 12){
         output_text += ' of every month';
       }
+      else {
+          output_text += ' in ' + dateList(schedule['M'], 'mon');
+      }
     }
+    console.log(output_text);
     return output_text;
   };
 
