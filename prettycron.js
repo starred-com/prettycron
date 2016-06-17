@@ -48,7 +48,7 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
    */
   var numberToDateName = function(value, type) {
     if (type == 'dow') {
-      return moment().day(value - 1).format('ddd');
+      return moment().day(value - 1).format('dddd');
     } else if (type == 'mon') {
       return moment().month(value - 1).format('MMM');
     }
