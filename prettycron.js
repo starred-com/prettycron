@@ -90,8 +90,60 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
    * generate a friendly sentence description.
    */
   var scheduleToSentence = function(schedule) {
-    var output_text = 'Every ';
+    var output_text = '';
 
+    if (schedule['D']) { // runs only on specific day(s) of month
+      if(schedule['D'].length < 31 && schedule['D'].length > 7){
+        output_text += constants.prettyCronEvery + ' ' + Math.round( 31 / schedule['D'].length) + ' ' + constants.prettyCronDays;
+      }
+      else if(schedule['D'].length == 31){
+        output_text += constants.prettyCronEveryday;
+      }
+      else {
+        output_text += constants.prettyCronOnThe + ' ' + numberList(schedule['D']);
+      }
+      if (!schedule['M']) {
+        output_text += ' ' + constants.prettyCronEveryMonth;
+      }
+    }
+
+    if (schedule['d']) { // runs only on specific day(s) of week
+      if (schedule['D']) {
+        // if both day fields are specified, cron uses both; superuser.com/a/348372
+        output_text += ' ' + constants.prettyCronAndEvery + ' ';
+      } else {
+        output_text += constants.prettyCronOn + ' ';
+      }
+      // set dow count
+      if (schedule['dc']) {
+        output_text += constants.prettyCronThe + ' ' + moment()._locale.ordinal(schedule['dc'][0]) + ' ';
+      }
+      output_text += dateList(schedule['d'], 'dow');
+      if (!schedule['M']) {
+        output_text += ' ' + constants.prettyCronEveryMonth;
+      }      
+    }
+
+    if (schedule['M']) {
+      // runs only in specific months; put this output last
+      if(schedule['M'].length < 12 && schedule['M'].length >= 4){
+          output_text += ' ' + constants.prettyCronEvery +' ' + Math.round(12 / schedule['M'].length) + ' ' + constants.prettyCronMonths;
+      }
+      else if(schedule['M'].length == 12){
+        output_text += ' ' + constants.prettyCronEveryMonth;
+      }
+      else {
+          output_text += ' ' + constants.prettyCronIn + ' ' + dateList(schedule['M'], 'mon');
+      }
+    }
+
+    if (!schedule['d'] && !schedule['D']) {
+      output_text += constants.prettyCronEveryDay;
+      if (!schedule['M']) {
+        output_text += ' ' + constants.prettyCronEveryMonth;
+      }
+    }
+    
     if (schedule['h'] && schedule['m'] && schedule['h'].length <= 2 && schedule['m'].length <= 2) {
       // If there are only one or two specified values for
       // hour or minute, print them in HH:MM format
@@ -103,77 +155,14 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
         }
       }
       if (hm.length < 2) {
-        output_text = hm[0];
+        output_text += ' ' + constants.prettyCronAt + ' ' + hm[0];
       } else {
         var last_val = hm.pop();
-        output_text = hm.join(', ') + ' and ' + last_val;
-      }
-      if (!schedule['d'] && !schedule['D']) {
-        output_text += ' every day';
+        output_text += ' ' + constants.prettyCronAt + ' ' + hm.join(', ') + ' ' + constants.prettyCronAnd + ' ' + last_val;
       }
 
-    } else {
-      // Otherwise, list out every specified hour/minute value.
-
-      if(schedule['h']) { // runs only at specific hours
-        if (schedule['m']) { // and only at specific minutes
-          output_text += numberList(schedule['m']) + ' minute past the ' + numberList(schedule['h']) + ' hour';
-        } else { // specific hours, but every minute
-          output_text += 'minute of ' + numberList(schedule['h']) + ' hour';
-        }
-      } else if(schedule['m']) { // every hour, but specific minutes
-        if (schedule['m'].length == 1 && schedule['m'][0] == 0) {
-          output_text += 'hour, on the hour';
-        } else {
-          output_text += numberList(schedule['m']) + ' minute past every hour';
-        }
-      } else { // cronspec has "*" for both hour and minute
-        output_text += 'minute';
-      }
     }
 
-    if (schedule['D']) { // runs only on specific day(s) of month
-      if(schedule['D'].length < 31 && schedule['D'].length > 7){
-        output_text += ' every ' + Math.round( 31 / schedule['D'].length) + ' days';
-      }
-      else if(schedule['D'].length == 31){
-        output_text += ' on every day';
-      }
-      else {
-        output_text += ' on the ' + numberList(schedule['D']);
-      }
-      if (!schedule['M']) {
-        output_text += ' of every month';
-      }
-    }
-
-    if (schedule['d']) { // runs only on specific day(s) of week
-      if (schedule['D']) {
-        // if both day fields are specified, cron uses both; superuser.com/a/348372
-        output_text += ' and every ';
-      } else {
-        output_text += ' on ';
-      }
-      // set dow count
-      if (schedule['dc']) {
-        output_text += 'the ' + moment()._locale.ordinal(schedule['dc'][0]) + ' ';
-      }
-      output_text += dateList(schedule['d'], 'dow');
-    }
-
-    if (schedule['M']) {
-      // runs only in specific months; put this output last
-      if(schedule['M'].length < 12 && schedule['M'].length >= 4){
-          output_text += ' every ' + Math.round(12 / schedule['M'].length) + ' months';
-      }
-      else if(schedule['M'].length == 12){
-        output_text += ' of every month';
-      }
-      else {
-          output_text += ' in ' + dateList(schedule['M'], 'mon');
-      }
-    }
-    
     return output_text;
   };
 
