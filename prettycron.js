@@ -72,7 +72,7 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
       }
       output_text += numberToDateName(value, type);
     }
-    return output_text + ' and ' + numberToDateName(last_val, type);
+    return output_text + ' ' + constants.prettyCronAnd + ' ' + numberToDateName(last_val, type);
   };
 
   /*
