@@ -23,6 +23,7 @@
 
 if ((!moment || !later) && (typeof require !== 'undefined')) {
   var moment = require('moment');
+  require('moment/locale/nl');
   var later = require('later');
 }
 
@@ -34,6 +35,7 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
    * "and" plus ordinal text on the last item).
    */
   var numberList = function(numbers) {
+    moment.locale(constants.languageCode);
     if (numbers.length < 2) {
       return moment()._locale.ordinal(numbers);
     }
@@ -90,6 +92,7 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
    * generate a friendly sentence description.
    */
   var scheduleToSentence = function(schedule) {
+    moment.locale(constants.languageCode);
     var output_text = '';
 
     if (schedule['D']) { // runs only on specific day(s) of month
