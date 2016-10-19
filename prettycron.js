@@ -39,7 +39,7 @@ if ((!moment || !later) && (typeof require !== 'undefined')) {
     }
 
     var last_val = numbers.pop();
-    return numbers.join(', ') + ' and ' + moment()._locale.ordinal(last_val);
+    return numbers.join(', ') + ' ' + constants.prettyCronAnd + ' ' + moment()._locale.ordinal(last_val);
   };
 
   /*
